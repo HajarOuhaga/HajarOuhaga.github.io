@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cellule solaire à pérovskite CsSnI₃ – Hajar Ouhaga</title>
+<meta name="description" content="PFE de Licence : simulation SCAPS d’une cellule solaire à pérovskite sans plomb (CsSnI₃).">
+<style>
+:root{
+  --bg:#f6f8fa; --ink:#10263b; --muted:#4d6074; --line:#d3dce5; --accent:#0f6f80; --card:#ffffff;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c1722; --ink:#e8eef4; --muted:#9db0c2; --line:#233546; --accent:#5cc3d4; --card:#12202e;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans","Segoe UI",Roboto,Arial,sans-serif;line-height:1.6;font-size:17px}
+a{color:var(--accent)}
+a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{max-width:860px;margin:0 auto;padding:0 24px}
+nav{display:flex;gap:22px;flex-wrap:wrap;padding:22px 0;font-size:15px}
+nav a{color:var(--muted);text-decoration:none}
+nav a:hover{color:var(--accent)}
+header.hero{position:relative;padding:56px 0 72px;overflow:hidden}
+.hero svg{position:absolute;right:-40px;top:10px;width:420px;max-width:80%;opacity:.9;z-index:0}
+.hero .in{position:relative;z-index:1}
+h1{font-size:clamp(2.6rem,8vw,4.6rem);line-height:1.02;margin:0 0 18px;font-weight:600;letter-spacing:-.02em}
+.hero p{max-width:34em;font-size:1.15rem;color:var(--muted);margin:0 0 26px}
+.btn{display:inline-block;padding:11px 20px;border-radius:6px;background:var(--accent);color:var(--bg);text-decoration:none;font-weight:600;margin-right:10px}
+.btn.alt{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+section{padding:48px 0;border-top:1px solid var(--line)}
+h2{font-size:1.7rem;margin:0 0 24px;font-weight:600}
+.proj{display:grid;grid-template-columns:1fr;gap:6px;padding:22px 0;border-bottom:1px solid var(--line)}
+.proj:first-of-type{padding-top:0}
+.proj h3{margin:0;font-size:1.25rem}
+.proj p{margin:0;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px;padding:0;list-style:none}
+.tags li{font-size:13.5px;padding:2px 10px;border:1px solid var(--line);border-radius:99px;color:var(--muted);background:var(--card)}
+.links a{margin-right:16px;font-weight:600;font-size:15px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px}
+.cols h3{margin:0 0 8px;font-size:1.05rem}
+.cols ul{margin:0;padding-left:18px;color:var(--muted)}
+.time{list-style:none;margin:0;padding:0}
+.time li{padding:0 0 18px 18px;border-left:2px solid var(--line);position:relative}
+.time li::before{content:"";position:absolute;left:-6px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.time b{display:block}
+.time span{color:var(--muted)}
+footer{padding:36px 0 56px;border-top:1px solid var(--line);color:var(--muted);font-size:15px}
+@media (prefers-reduced-motion:no-preference){
+  .hero svg path.orbit{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 2.4s ease-out .2s forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+}
+
+article h1{font-size:clamp(1.9rem,6vw,3rem);margin:8px 0 6px}
+.meta{color:var(--muted);margin:0 0 8px}
+h2{font-size:1.35rem;margin:0 0 12px}
+section{padding:32px 0}
+ul.plain{padding-left:20px;margin:0}
+ul.plain li{margin-bottom:8px}
+figure{margin:18px 0}
+figure img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
+figcaption{color:var(--muted);font-size:14.5px;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav aria-label="Navigation"><a href="index.html">Retour au portfolio</a></nav>
+  <article>
+    <h1>Cellule solaire à pérovskite sans plomb (CsSnI₃) : simulation avec SCAPS-1D</h1>
+    <p class="meta">Projet de fin d’études de Licence en Énergies Renouvelables, option Technologies Solaires et Éoliennes, FST Errachidia, 2024–2025. Réalisé en binôme avec Ahlam El Aidouni. Soutenu le 25 juin 2025.</p>
+    <ul class="tags"><li>SCAPS-1D</li><li>Origin Pro</li><li>Simulation numérique</li><li>Photovoltaïque</li></ul>
+
+    <section>
+      <h2>Contexte et problème</h2>
+      <p>Le silicium domine le marché photovoltaïque, mais son rendement est limité. Les cellules à pérovskite sont une alternative prometteuse, mais beaucoup contiennent du plomb, toxique. Ce projet étudie une pérovskite sans plomb, le CsSnI₃, comme couche absorbante.</p>
+    </section>
+
+    <section>
+      <h2>Ce que j’ai fait</h2>
+      <ul class="plain">
+        <li>Étude théorique : énergie photovoltaïque, semi-conducteurs, types de pérovskites, comparaison avec le silicium.</li>
+        <li>Modélisation sous SCAPS-1D d’une cellule de structure FTO / GO / CsSnI₃ / Cu₂O.</li>
+        <li>Étude de l’influence de trois paramètres sur le rendement (η), la tension Voc, le courant Jsc et le facteur de forme (FF) : l’épaisseur de l’absorbeur (200 à 900 nm), la densité de défauts Nt (10¹² à 10¹⁹ cm⁻³) et la température (240 à 300 K).</li>
+        <li>Tracé et analyse des courbes sous Origin Pro.</li>
+      </ul>
+      <figure><img src="perovskite-cellule.png" alt="Structure de la cellule définie dans SCAPS-1D" onerror="this.parentElement.style.display='none'"><figcaption>Structure de la cellule définie dans SCAPS-1D</figcaption></figure>
+    </section>
+
+    <section>
+      <h2>Résultats</h2>
+      <p>Cellule de référence (absorbeur de 200 nm) : rendement de 24,58 %, Voc de 1,13 V, Jsc de 24,74 mA/cm² et FF de 88,03 %.</p>
+      <ul class="plain">
+        <li><b>Épaisseur :</b> le rendement augmente puis sature, avec un optimum autour de 0,7 à 0,8 µm. Voc et FF diminuent avec l’épaisseur, Jsc augmente puis sature.</li>
+        <li><b>Défauts (Nt) :</b> tous les paramètres baissent quand Nt augmente, car les défauts agissent comme des centres de recombinaison. La chute devient nette au-delà de 10¹⁵ cm⁻³.</li>
+        <li><b>Température :</b> le rendement et la tension Voc diminuent quand la température augmente.</li>
+      </ul>
+      <figure><img src="perovskite-iv.png" alt="Courbe courant-tension et paramètres de la cellule de référence" onerror="this.parentElement.style.display='none'"><figcaption>Courbe courant-tension et paramètres de la cellule de référence</figcaption></figure>
+      <figure><img src="perovskite-epaisseur.png" alt="Influence de l’épaisseur de l’absorbeur" onerror="this.parentElement.style.display='none'"><figcaption>Influence de l’épaisseur de l’absorbeur</figcaption></figure>
+      <figure><img src="perovskite-defauts.png" alt="Influence de la densité de défauts Nt" onerror="this.parentElement.style.display='none'"><figcaption>Influence de la densité de défauts Nt</figcaption></figure>
+      <figure><img src="perovskite-temperature.png" alt="Influence de la température" onerror="this.parentElement.style.display='none'"><figcaption>Influence de la température</figcaption></figure>
+    </section>
+
+    <section>
+      <h2>Limites et suite possible</h2>
+      <p>Il s’agit d’une simulation 1D, sans validation expérimentale. Le point faible principal des pérovskites à base d’étain est l’oxydation de Sn²⁺ en Sn⁴⁺, qui crée des défauts. Une suite logique serait d’étudier cet effet et la stabilité de la cellule.</p>
+    </section>
+  </article>
+  <footer>© 2026 Hajar Ouhaga</footer>
+</div>
+</body>
+</html>
