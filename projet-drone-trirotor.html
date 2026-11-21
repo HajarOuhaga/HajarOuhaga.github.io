@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drone tri-rotor avec système de pivot – Hajar Ouhaga</title>
+<meta name="description" content="Mini-projet ENSA Safi : conception et réalisation d’un drone tri-rotor avec pivot du moteur arrière pour le contrôle du lacet.">
+<style>
+:root{
+  --bg:#f6f8fa; --ink:#10263b; --muted:#4d6074; --line:#d3dce5; --accent:#0f6f80; --card:#ffffff;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c1722; --ink:#e8eef4; --muted:#9db0c2; --line:#233546; --accent:#5cc3d4; --card:#12202e;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans","Segoe UI",Roboto,Arial,sans-serif;line-height:1.6;font-size:17px}
+a{color:var(--accent)}
+a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{max-width:860px;margin:0 auto;padding:0 24px}
+nav{display:flex;gap:22px;flex-wrap:wrap;padding:22px 0;font-size:15px}
+nav a{color:var(--muted);text-decoration:none}
+nav a:hover{color:var(--accent)}
+header.hero{position:relative;padding:56px 0 72px;overflow:hidden}
+.hero svg{position:absolute;right:-40px;top:10px;width:420px;max-width:80%;opacity:.9;z-index:0}
+.hero .in{position:relative;z-index:1}
+h1{font-size:clamp(2.6rem,8vw,4.6rem);line-height:1.02;margin:0 0 18px;font-weight:600;letter-spacing:-.02em}
+.hero p{max-width:34em;font-size:1.15rem;color:var(--muted);margin:0 0 26px}
+.btn{display:inline-block;padding:11px 20px;border-radius:6px;background:var(--accent);color:var(--bg);text-decoration:none;font-weight:600;margin-right:10px}
+.btn.alt{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+section{padding:48px 0;border-top:1px solid var(--line)}
+h2{font-size:1.7rem;margin:0 0 24px;font-weight:600}
+.proj{display:grid;grid-template-columns:1fr;gap:6px;padding:22px 0;border-bottom:1px solid var(--line)}
+.proj:first-of-type{padding-top:0}
+.proj h3{margin:0;font-size:1.25rem}
+.proj p{margin:0;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px;padding:0;list-style:none}
+.tags li{font-size:13.5px;padding:2px 10px;border:1px solid var(--line);border-radius:99px;color:var(--muted);background:var(--card)}
+.links a{margin-right:16px;font-weight:600;font-size:15px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px}
+.cols h3{margin:0 0 8px;font-size:1.05rem}
+.cols ul{margin:0;padding-left:18px;color:var(--muted)}
+.time{list-style:none;margin:0;padding:0}
+.time li{padding:0 0 18px 18px;border-left:2px solid var(--line);position:relative}
+.time li::before{content:"";position:absolute;left:-6px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.time b{display:block}
+.time span{color:var(--muted)}
+footer{padding:36px 0 56px;border-top:1px solid var(--line);color:var(--muted);font-size:15px}
+@media (prefers-reduced-motion:no-preference){
+  .hero svg path.orbit{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 2.4s ease-out .2s forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+}
+
+article h1{font-size:clamp(1.9rem,6vw,3rem);margin:8px 0 6px}
+.meta{color:var(--muted);margin:0 0 8px}
+h2{font-size:1.35rem;margin:0 0 12px}
+section{padding:32px 0}
+ul.plain{padding-left:20px;margin:0}
+ul.plain li{margin-bottom:8px}
+figure{margin:18px 0}
+figure img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px}
+figcaption{color:var(--muted);font-size:14.5px;margin-top:6px}
+.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.gal figure{margin:0}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.scroll{overflow-x:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav aria-label="Navigation"><a href="index.html">Retour au portfolio</a></nav>
+  <article>
+    <h1>Drone tri-rotor avec système de pivot pour le contrôle du lacet</h1>
+    <p class="meta">Mini-projet de 2e année, Génie Aéronautique et Technologies de l’Espace, ENSA Safi, 2025–2026. Équipe de quatre : Hajar Ouhaga, Hossame Jabir, Nada Edderbali et Rihab El Moutaki. Encadrant : M. Omar Askour. Présenté le 22 juin 2026.</p>
+    <ul class="tags"><li>CATIA V5</li><li>Pixhawk 2.4.8</li><li>Mission Planner</li><li>Servomoteur</li><li>Réglage PID</li></ul>
+    <figure><img src="drone-reel.jpg" alt="Le prototype réalisé" onerror="this.parentElement.style.display='none'"><figcaption>Le prototype réalisé</figcaption></figure>
+
+    <section>
+      <h2>Objectif</h2>
+      <p>Concevoir, fabriquer et faire voler un drone à trois moteurs. Un tri-rotor ne peut pas contrôler son lacet (la rotation sur lui-même) en jouant sur le sens de rotation des moteurs comme un quadrirotor. Il faut donc faire pivoter le moteur arrière pour créer une poussée latérale : c’est le rôle du système de pivot.</p>
+    </section>
+
+    <section>
+      <h2>Conception</h2>
+      <ul class="plain">
+        <li><b>Structure en Y</b> avec trois bras à 120°, pour répartir les masses et les efforts autour du centre de gravité et laisser la place au mécanisme de pivot.</li>
+        <li><b>Bras légèrement courbés</b> pour éloigner les hélices du châssis et limiter les perturbations du flux d’air.</li>
+        <li><b>Masses concentrées au centre</b> : batterie, contrôleur de vol et distributeur de puissance près du centre de gravité.</li>
+        <li><b>Pivot du moteur arrière</b> : le moteur tourne autour d’un axe vertical sous l’action d’un servomoteur MG996R, avec un support rigide et compact, facile à régler et à remplacer.</li>
+        <li>Modélisation de la structure sous <b>CATIA V5</b>.</li>
+      </ul>
+      <figure><img src="drone-catia-y.png" alt="Modèle CATIA : configuration en Y" onerror="this.parentElement.style.display='none'"><figcaption>Modèle CATIA : configuration en Y</figcaption></figure>
+      <div class="gal">
+        <figure><img src="drone-pivot-cote.png" alt="Pivot, vue de côté" onerror="this.parentElement.style.display='none'"><figcaption>Pivot, vue de côté</figcaption></figure>
+        <figure><img src="drone-pivot-dessus.png" alt="Pivot, vue de dessus" onerror="this.parentElement.style.display='none'"><figcaption>Pivot, vue de dessus</figcaption></figure>
+        <figure><img src="drone-pivot-inclinaison.png" alt="Inclinaison du moteur par le servomoteur" onerror="this.parentElement.style.display='none'"><figcaption>Inclinaison du moteur par le servomoteur</figcaption></figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>Réalisation et programmation</h2>
+      <ul class="plain">
+        <li>Fabrication des bras, découpe d’un châssis triangulaire, assemblage et contrôle de l’alignement.</li>
+        <li>Installation et câblage : batterie LiPo 3S 2200 mAh, distributeur de puissance, trois contrôleurs de vitesse (ESC) de 30 A, trois moteurs brushless, servomoteur de pivot sur une sortie dédiée du Pixhawk.</li>
+        <li>Configuration du contrôleur de vol <b>Pixhawk 2.4.8</b> avec <b>Mission Planner</b> : firmware ArduCopter version Tricopter, calibration de l’accéléromètre, du compas, de la radiocommande FlySky et des ESC, réglage des modes de vol.</li>
+        <li>Tests progressifs : moteurs (sens de rotation), pivot, communication avec la station sol, puis décollage.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Problèmes rencontrés et solutions</h2>
+      <div class="scroll"><table>
+        <thead><tr><th>Problème</th><th>Solution</th></tr></thead>
+        <tbody>
+          <tr><td>Portance insuffisante : structure trop lourde, hélices trop proches du châssis</td><td>Allègement (bras et plaques en PVC) et éloignement des moteurs du centre</td></tr>
+          <tr><td>Instabilité : rotation involontaire au décollage, dérive latérale</td><td>Recalibrage des capteurs, fixation antivibratoire du Pixhawk, réglage itératif des gains PID</td></tr>
+          <tr><td>Châssis à un seul étage, masses mal réparties, accès difficile</td><td>Nouvelle conception à deux étages : batterie et distributeur en bas (centre de gravité abaissé), ESC, Pixhawk et récepteur au-dessus (moins d’interférences sur les capteurs)</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section>
+      <h2>Résultats</h2>
+      <ul class="plain">
+        <li>Les trois moteurs, le servomoteur de pivot et la communication avec Mission Planner fonctionnent.</li>
+        <li>Le drone décolle et tient un vol stationnaire stable à basse altitude (environ 0,5 m, mode Stabilize), avec une bonne stabilité en roulis et en tangage.</li>
+        <li>Le pivot du moteur arrière contrôle efficacement le lacet.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Limites et suite possible</h2>
+      <p>Le prototype est artisanal et reste sensible aux vibrations et aux perturbations extérieures. Il n’a pas de navigation avancée. Les suites envisagées : navigation par GPS, télémétrie, optimisation des paramètres de commande et capteurs supplémentaires.</p>
+    </section>
+  </article>
+  <footer>© 2026 Hajar Ouhaga</footer>
+</div>
+</body>
+</html>
