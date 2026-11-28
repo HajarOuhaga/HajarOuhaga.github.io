@@ -1,0 +1,138 @@
+{
+  "name": "VPR Logistics - Rapport de tournées",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "8bd3f135-2e13-438a-b527-05541b85346d",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "command": "py -3.12 \"C:\\chemin\\vers\\VPR\\vrp_app.py\" --no-prompt --json --output-dir \"C:\\chemin\\vers\\VPR\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "d72f9b2b-b641-4185-a388-88d535df9e6c",
+      "name": "Execute Command"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst r = JSON.parse($input.first().json.stdout);\n\nlet html = `\n<h1>Rapport de tournées VPR Logistics</h1>\n<h2>Résumé de l'optimisation</h2>\n\n<p><b>Distance totale :</b> ${r.distance_totale}</p>\n<p><b>Nombre de véhicules :</b> ${r.vehicules.length}</p>\n<p><b>Clients non servis :</b>\n${r.non_servis.length ? r.non_servis.join(\", \") : \"Aucun\"}\n</p>\n\n<hr>\n<h2>Détail des tournées</h2>\n`;\n\nfor (const v of r.vehicules) {\n  const route = v.route.map(n =>\n    n === 0 ? \"Dépôt\" : \"Client \" + String(n).padStart(2, \"0\")\n  ).join(\" → \");\n\n  html += `\n    <h3>Véhicule ${v.vehicule}</h3>\n    <p><b>Itinéraire :</b> ${route}</p>\n    <p><b>Distance :</b> ${v.distance}</p>\n    <p><b>Charge :</b> ${v.charge}/${v.capacite}</p>\n    <p><b>Capacité respectée :</b> ${v.capacite_ok ? \"Oui\" : \"Non\"}</p>\n    <p><b>Fenêtres temporelles respectées :</b> ${v.fenetres_ok ? \"Oui\" : \"Non\"}</p>\n    <hr>\n  `;\n}\n\nreturn [{ json: { html } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "710a2682-ed7f-407a-9364-b2b90757e090",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:\\chemin\\vers\\VPR\\tournees.png",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        0
+      ],
+      "id": "5ed7d968-6438-4038-be71-54eea6ef65d6",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "sendTo": "destinataire@exemple.com",
+        "subject": "Rapport d'optimisation des tournées – VPR Logistics",
+        "message": "={{ $('Code in JavaScript').first().json.html }}\n",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        0
+      ],
+      "id": "074d8254-1310-4b57-82d9-9241323894f2",
+      "name": "Send a message"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Execute Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b5009e8a-162f-4d68-98dc-0b65ee6e878a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9de01db32421c0bd9eb082e7189ffba550f9f73607bf5a0a1a9609246e09de1c"
+  },
+  "nodeGroups": [],
+  "id": "NwLebwQ7TfnttpB8",
+  "tags": []
+}

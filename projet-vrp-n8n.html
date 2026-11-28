@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tournées de véhicules (VRP) automatisées avec n8n – Hajar Ouhaga</title>
+<meta name="description" content="Devoir de logistique industrielle : optimisation de tournées avec OR-Tools et automatisation du rapport par e-mail avec n8n.">
+<style>
+:root{
+  --bg:#f6f8fa; --ink:#10263b; --muted:#4d6074; --line:#d3dce5; --accent:#0f6f80; --card:#ffffff;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c1722; --ink:#e8eef4; --muted:#9db0c2; --line:#233546; --accent:#5cc3d4; --card:#12202e;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans","Segoe UI",Roboto,Arial,sans-serif;line-height:1.6;font-size:17px}
+a{color:var(--accent)}
+a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{max-width:860px;margin:0 auto;padding:0 24px}
+nav{display:flex;gap:22px;flex-wrap:wrap;padding:22px 0;font-size:15px}
+nav a{color:var(--muted);text-decoration:none}
+nav a:hover{color:var(--accent)}
+header.hero{position:relative;padding:56px 0 72px;overflow:hidden}
+.hero svg{position:absolute;right:-40px;top:10px;width:420px;max-width:80%;opacity:.9;z-index:0}
+.hero .in{position:relative;z-index:1}
+h1{font-size:clamp(2.6rem,8vw,4.6rem);line-height:1.02;margin:0 0 18px;font-weight:600;letter-spacing:-.02em}
+.hero p{max-width:34em;font-size:1.15rem;color:var(--muted);margin:0 0 26px}
+.btn{display:inline-block;padding:11px 20px;border-radius:6px;background:var(--accent);color:var(--bg);text-decoration:none;font-weight:600;margin-right:10px}
+.btn.alt{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+section{padding:48px 0;border-top:1px solid var(--line)}
+h2{font-size:1.7rem;margin:0 0 24px;font-weight:600}
+.proj{display:grid;grid-template-columns:1fr;gap:6px;padding:22px 0;border-bottom:1px solid var(--line)}
+.proj:first-of-type{padding-top:0}
+.proj h3{margin:0;font-size:1.25rem}
+.proj p{margin:0;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px;padding:0;list-style:none}
+.tags li{font-size:13.5px;padding:2px 10px;border:1px solid var(--line);border-radius:99px;color:var(--muted);background:var(--card)}
+.links a{margin-right:16px;font-weight:600;font-size:15px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px}
+.cols h3{margin:0 0 8px;font-size:1.05rem}
+.cols ul{margin:0;padding-left:18px;color:var(--muted)}
+.time{list-style:none;margin:0;padding:0}
+.time li{padding:0 0 18px 18px;border-left:2px solid var(--line);position:relative}
+.time li::before{content:"";position:absolute;left:-6px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.time b{display:block}
+.time span{color:var(--muted)}
+footer{padding:36px 0 56px;border-top:1px solid var(--line);color:var(--muted);font-size:15px}
+@media (prefers-reduced-motion:no-preference){
+  .hero svg path.orbit{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 2.4s ease-out .2s forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+}
+
+article h1{font-size:clamp(1.9rem,6vw,3rem);margin:8px 0 6px}
+.meta{color:var(--muted);margin:0 0 8px}
+h2{font-size:1.35rem;margin:0 0 12px}
+section{padding:32px 0}
+ul.plain{padding-left:20px;margin:0}
+ul.plain li{margin-bottom:8px}
+figure{margin:18px 0}
+figure img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
+figcaption{color:var(--muted);font-size:14.5px;margin-top:6px}
+.steps{list-style:none;margin:18px 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;counter-reset:s}
+.steps li{counter-increment:s;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:12px 14px;font-size:15px}
+.steps li::before{content:counter(s);display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;border-radius:50%;background:var(--accent);color:var(--bg);font-weight:600;font-size:13px;margin-bottom:6px}
+.steps b{display:block}
+.steps span{color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.scroll{overflow-x:auto}
+code{font-size:.92em;background:var(--card);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav aria-label="Navigation"><a href="index.html">Retour au portfolio</a></nav>
+  <article>
+    <h1>Tournées de véhicules (VRP) : optimisation avec OR-Tools et automatisation avec n8n</h1>
+    <p class="meta">Devoir libre, module Logistique industrielle, ENSA Safi, 2026. Entreprise fictive « VPR Logistics ».</p>
+    <ul class="tags"><li>n8n</li><li>Python</li><li>OR-Tools</li><li>Optimisation</li><li>Automatisation</li></ul>
+
+    <section>
+      <h2>Le problème</h2>
+      <p>Un dépôt doit servir 20 clients avec 3 véhicules de capacité 50. Chaque client a une demande, un temps de service, une fenêtre de temps (par exemple 8h–12h) et une priorité de 1 à 3. L’objectif : servir tous les clients en minimisant la distance totale, sans dépasser la capacité des véhicules ni les fenêtres de temps. C’est un problème de tournées avec fenêtres de temps (VRPTW).</p>
+    </section>
+
+    <section>
+      <h2>Le workflow n8n</h2>
+      <p>L’optimisation, le rapport et l’envoi par e-mail s’enchaînent automatiquement en un clic dans n8n, installé en local :</p>
+      <ol class="steps">
+        <li><b>Déclencheur manuel</b><span>Lance le workflow.</span></li>
+        <li><b>Execute Command</b><span>Exécute <code>vrp_app.py</code> et récupère le résultat en JSON.</span></li>
+        <li><b>Code JavaScript</b><span>Lit le JSON et construit le rapport HTML : résumé et itinéraire de chaque véhicule.</span></li>
+        <li><b>Read/Write Files</b><span>Charge la carte des tournées (<code>tournees.png</code>).</span></li>
+        <li><b>Gmail</b><span>Envoie le rapport avec la carte en pièce jointe.</span></li>
+      </ol>
+      <p>Pour que n8n puisse piloter le programme, j’ai donné au script Python une interface en ligne de commande : <code>--no-prompt</code> (aucune question posée), <code>--json</code> (résultat structuré sur la sortie standard) et <code>--output-dir</code> (dossier de sortie). Les graphiques sont produits sans écran, ce qui permet de les générer depuis un workflow.</p>
+      <p><a href="vrp-n8n-workflow.json" download>Télécharger le workflow n8n (JSON)</a>. Pour l’utiliser : dans n8n, menu Import from file, puis adapter le chemin du script, le compte Gmail et l’adresse du destinataire.</p>
+    </section>
+
+    <section>
+      <h2>Modélisation avec OR-Tools</h2>
+      <ul class="plain">
+        <li><b>Coût :</b> distance entre les points, à minimiser.</li>
+        <li><b>Capacité :</b> chaque véhicule transporte au maximum 50 unités.</li>
+        <li><b>Temps :</b> durée du trajet et temps de service de chaque client, avec une fenêtre de temps à respecter.</li>
+        <li><b>Priorités :</b> un client non servi coûte très cher (pénalité plus forte pour les priorités élevées), et les clients urgents sont encouragés à être servis plus tôt.</li>
+        <li><b>Recherche :</b> solution initiale par le chemin le plus court, puis amélioration par recherche locale guidée, limitée à 10 secondes.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Résultats</h2>
+      <p>Tous les clients sont servis, avec 199,33 de distance totale. Les capacités et les fenêtres de temps sont respectées pour les trois véhicules.</p>
+      <div class="scroll"><table>
+        <thead><tr><th>Véhicule</th><th>Clients servis</th><th>Distance</th><th>Charge</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>5</td><td>40,43</td><td>28 / 50</td></tr>
+          <tr><td>2</td><td>9</td><td>71,64</td><td>49 / 50</td></tr>
+          <tr><td>3</td><td>7</td><td>87,27</td><td>41 / 50</td></tr>
+        </tbody>
+      </table></div>
+      <figure><img src="vrp-tournees.png" alt="Carte des tournées optimisées générée par le programme" onerror="this.parentElement.style.display='none'"><figcaption>Carte des tournées optimisées générée par le programme</figcaption></figure>
+    </section>
+
+    <section>
+      <h2>Autres versions du projet</h2>
+      <ul class="plain">
+        <li>Une version 100 % Python (<code>envoyer_rapport.py</code>) qui réalise la même chaîne avec la bibliothèque <code>smtplib</code>, sans n8n.</li>
+        <li>Une application web (<code>app.py</code>) avec Streamlit pour saisir les paramètres et visualiser les tournées.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Limites et suite possible</h2>
+      <p>Les données sont fictives et les distances sont à vol d’oiseau, pas par la route. Le workflow se lance à la main, avec un chemin de fichier propre à mon ordinateur. Les prochaines étapes : un déclencheur planifié ou un webhook, la lecture des clients depuis une feuille Google Sheets, et des distances routières réelles.</p>
+    </section>
+  </article>
+  <footer>© 2026 Hajar Ouhaga</footer>
+</div>
+</body>
+</html>
